@@ -14,5 +14,6 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Build with Maven
+        working-directory: ./experimental/Testing/
         run: mvn compile com.google.cloud.tools:jib-maven-plugin:2.3.0:dockerBuild
         
