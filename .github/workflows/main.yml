@@ -28,17 +28,7 @@ jobs:
         working-directory: ./experimental/Testing/
         run: | 
           mvn compile com.google.cloud.tools:jib-maven-plugin:2.8.0:build \-Dimage=ghcr.io/${{ github.repository_owner }}/testimage:latest
-        
-      - name: "Upload Docker image to Azure"
-        uses: wlixcc/SFTP-Deploy-Action@v1.0
-        with:
-          username: '${{ secrets.AZURE_USERNAME }}'
-          server: '${{ secrets.AZURE_HOSTNAME }}'
-          ssh_private_key: '${{ secrets.AZURE_KEY }}'
-          local_path: './experimental/Testing/docker/docker-compose.yml'
-          remote_path: '/tmp/docker-compose.yml'
-          args: '-o Protocol'
-          
+     
       - name: "Run Compose on Azure"
         uses: appleboy/ssh-action@master
         with:
@@ -47,6 +37,5 @@ jobs:
           key: ${{ secrets.AZURE_VM_KEY }}
           port: 22
           script: |
-            docker stop $(docker ps -a -q)
-            USER_CONTAINER=ghcr.io/${{ github.repository_owner }}/testimage:${{ env.RELEASE_VERSION }} docker-compose -f /tmp/docker-compose.yml up -d
+            ls -lai
           
