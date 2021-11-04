@@ -16,4 +16,9 @@ public class TestController {
         return "Hello World";
     }
 
+    //output to localhost:8080/testChange
+    @RequestMapping("/testChange")
+    public String testOutputTwo(){
+        return "Hello World Two";
+    }
 }
