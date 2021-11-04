@@ -37,6 +37,8 @@ jobs:
           ssh_private_key: '${{ secrets.AZURE_KEY }}'
           local_path: './experimental/Testing/docker/docker-compose.yml'
           remote_path: '/tmp/docker-compose.yml'
+          args: '-o Protocol'
+          
       - name: "Run Compose on Azure"
         uses: appleboy/ssh-action@master
         with:
