@@ -18,5 +18,7 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         working-directory: ./experimental/Testing/
-        run: mvn -B compile
+        run: | 
+          mvn -B compile
+          mvn -B test
         
