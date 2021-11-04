@@ -29,3 +29,22 @@ jobs:
         run: | 
           mvn compile com.google.cloud.tools:jib-maven-plugin:2.8.0:build \-Dimage=ghcr.io/${{ github.repository_owner }}/testimage:latest
         
+      - name: "Upload Docker image to Azure"
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: '${{ secrets.AZURE_USERNAME }}'
+          server: '${{ secrets.AZURE_HOSTNAME }}'
+          ssh_private_key: '${{ secrets.AZURE_KEY }}'
+          local_path: './experimental/Testing/docker/'
+          remote_path: 'devops1/devel/gitrepos/IntegrationA/experimental/docker/docker-compose.yml'
+      - name: "Run Compose on Azure"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AZURE_HOSTNAME }}
+          username: ${{ secrets.AZURE_USERNAME }}
+          key: ${{ secrets.AZURE_KEY }}
+          port: 22
+          script: |
+            docker stop $(docker ps -a -q)
+            USER_CONTAINER=ghcr.io/${{ github.repository_owner }}/testimage:0.0.1 docker-compose -f /tmp/docker-compose.yml up -d
+          
