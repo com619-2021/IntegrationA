@@ -35,8 +35,8 @@ jobs:
           username: '${{ secrets.AZURE_USERNAME }}'
           server: '${{ secrets.AZURE_HOSTNAME }}'
           ssh_private_key: '${{ secrets.AZURE_KEY }}'
-          local_path: './experimental/Testing/docker/'
-          remote_path: '/home/devops1/devel/gitrepos/IntegrationA/experimental/docker/docker-compose.yml'
+          local_path: './experimental/Testing/docker/docker-compose.yml'
+          remote_path: '/tmp/docker-compose.yml'
       - name: "Run Compose on Azure"
         uses: appleboy/ssh-action@master
         with:
