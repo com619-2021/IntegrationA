@@ -1,6 +1,9 @@
 name: Test-Workflow
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -15,5 +18,5 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         working-directory: ./experimental/Testing/
-        run: mvn compile com.google.cloud.tools:jib-maven-plugin:2.3.0:dockerBuild
+        run: mvn -B compile
         
