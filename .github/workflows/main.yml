@@ -16,9 +16,19 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+          
+      - name: 'Login to docker with GHCR'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Build with Maven
         working-directory: ./experimental/Testing/
         run: | 
           mvn -B compile
           mvn -B test
+          docker build ghcr.io/${{ github.repository_owner }}/test:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/${{ github.repository_owner }}/test:${{ env.RELEASE_VERSION }}
         
