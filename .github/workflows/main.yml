@@ -28,5 +28,5 @@ jobs:
         working-directory: ./experimental/Testing/
         run: | 
           mvn compile com.google.cloud.tools:jib-maven-plugin:2.3.0:dockerBuild
-          docker push ghcr.io/${{ github.repository_owner }}/testimage:${{ env.RELEASE_VERSION }}
+          docker push testimage:${{ env.RELEASE_VERSION }}
         
