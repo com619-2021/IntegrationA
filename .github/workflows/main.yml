@@ -36,6 +36,5 @@ jobs:
           username: ${{ secrets.AZURE_VM_USER }}
           key: ${{ secrets.AZURE_VM_KEY }}
           port: 22
-          script: |
-            ls -lai
+          script: ls -lai
           
