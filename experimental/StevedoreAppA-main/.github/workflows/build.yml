@@ -3,7 +3,7 @@ name: Build & Test StevedoreApp - A
 on:
   push:
     branches:
-      - main
+      - test
 
 jobs:
   build:
