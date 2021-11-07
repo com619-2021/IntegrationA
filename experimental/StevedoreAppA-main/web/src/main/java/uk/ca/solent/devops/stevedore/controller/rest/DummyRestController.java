@@ -25,4 +25,9 @@ public class DummyRestController {
         return testService.getAllTest();
     }
 
+    //output to localhost:8080/test
+    @RequestMapping("/test")
+    public String testOutput(){
+        return "Hello World";
+    }
 }

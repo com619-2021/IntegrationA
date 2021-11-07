@@ -25,9 +25,5 @@ public class DummyController {
         return "test";
     }
 
-    //output to localhost:8080/test
-    @RequestMapping("/test")
-    public String testOutput(){
-        return "Hello World";
-    }
+
 }
