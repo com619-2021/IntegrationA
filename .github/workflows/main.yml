@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build with Maven
-        working-directory: ./experimental/user-project/
+        working-directory: ./experimental/user-project/user-example/
         run: | 
           mvn -B --update-snapshots package -P packageAsDocker
           docker build ./docker -f ./docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/testimage:0.0.1
@@ -37,7 +37,7 @@ jobs:
           username: '${{ secrets.AZURE_USERNAME }}'
           server: '${{ secrets.AZURE_HOSTNAME }}'
           ssh_private_key: '${{ secrets.AZURE_KEY }}'
-          local_path: './experimental/user-project/docker/docker-compose.yml'
+          local_path: './experimental/user-project/user-example/docker/docker-compose.yml'
           remote_path: '/tmp/docker-compose.yml'
           
       - name: "Run Compose on Azure"
