@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build with Maven
-        working-directory: ./experimental/Testing/
+        working-directory: ./experimental/order-example/
         run: | 
           mvn compile com.google.cloud.tools:jib-maven-plugin:2.8.0:build \-Dimage=ghcr.io/${{ github.repository_owner }}/testimage:latest
           
@@ -35,7 +35,7 @@ jobs:
           username: '${{ secrets.AZURE_USERNAME }}'
           server: '${{ secrets.AZURE_HOSTNAME }}'
           ssh_private_key: '${{ secrets.AZURE_KEY }}'
-          local_path: './experimental/Testing/docker/docker-compose.yml'
+          local_path: './experimental/order-example/docker/docker-compose.yml'
           remote_path: '/tmp/docker-compose.yml'
           
       - name: "Run Compose on Azure"
