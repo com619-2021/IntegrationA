@@ -1,11 +1,35 @@
 version: "3.9"
 services:
-  user-example:
-    image: ${USER_CONTAINER}
+  app:
+    image: testimage
+
     ports:
-      - "8080:8080"
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+
+    environment:
+      SPRING_APPLICATION_JSON: '{
+            "spring.datasource.url"  : "jdbc:mariadb://$MARIADB_DOCKER_PORT/$MARIADB_DATABASE?useSSL=false",
+            "spring.datasource.username" : "$MARIADB_USER",
+            "spring.datasource.password" : "$MARIADB_ROOT_PASSWORD",
+            "spring.datasource.driver-class-name" : "org.mariadb.jdbc.Driver",
+            "spring.jpa.hibernate.ddl-auto" : "update"
+            "spring.thymeleaf.cache" : "false"
+            "spring.thymeleaf.suffix" : ".html"
+          }'
+
     volumes:
       - user-example-logs:/usr/local/tomcat/logs
+
+  mariadb:
+    image: mariadb
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MARIADB_ROOT_PASSWORD=$MARIADB_ROOT_PASSWORD
+      - MARIADB_DATABASE=$MARIADB_DATABASE
+    ports:
+      - $MARIADB_LOCAL_PORT:$MARIADB_DOCKER_PORT
+
 
 volumes:
   user-example-logs: {}
