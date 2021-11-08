@@ -13,8 +13,8 @@ services:
     image: mariadb
     restart: 'always'
     volumes: 
-      - "/var/lib/mysql/data:stevedore"
-      - "/var/lib/mysql/logs:stevedore"
+      - "/var/lib/mysql/data:stevedore_data"
+      - "/var/lib/mysql/logs:stevedore_log"
       - /var/docker/mariadb/conf:/etc/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
