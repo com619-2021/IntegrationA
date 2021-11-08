@@ -1,34 +1,24 @@
-version: "3.9"
 services:
-    mariadb:
+  web:
+    image: stevedore_web
+    restart: 'always'
+    depends_on:
+      - mariadb
+    restart: 'always'
+    ports:
+      - '8080:80'
+    links:
+      - mariadb
+	  
+  mariadb:
     image: mariadb
-    restart: unless-stopped
+    restart: 'always'
+    volumes: 
+      - "/var/lib/mysql/data:stevedore"
+      - "/var/lib/mysql/logs:stevedore"
+      - /var/docker/mariadb/conf:/etc/mysql
     environment:
-      - MARIADB_ROOT_PASSWORD=root
-      - MARIADB_DATABASE=stevedore
-    ports:
-      - 3307:3306
-
-  
-  app:
-    image: testimage
-    ports:
-      - 3307:3306
-
-    environment:
-      SPRING_APPLICATION_JSON: '{
-            "spring.datasource.url"  : "jdbc:mariadb://3306/stevedore?useSSL=false",
-            "spring.datasource.username" : "root",
-            "spring.datasource.password" : "root",
-            "spring.datasource.driver-class-name" : "org.mariadb.jdbc.Driver",
-            "spring.jpa.hibernate.ddl-auto" : "update"
-            "spring.thymeleaf.cache" : "false"
-            "spring.thymeleaf.suffix" : ".html"
-          }'
-
-    volumes:
-      - user-example-logs:/usr/local/tomcat/logs
-
-
-volumes:
-  user-example-logs: {}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: stevedore
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
