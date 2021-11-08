@@ -4,13 +4,13 @@ services:
     image: testimage
 
     ports:
-      - 3307:3306
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
 
     environment:
       SPRING_APPLICATION_JSON: '{
-            "spring.datasource.url"  : "jdbc:mariadb://3306/stevedore?useSSL=false",
-            "spring.datasource.username" : "root",
-            "spring.datasource.password" : "root",
+            "spring.datasource.url"  : "jdbc:mariadb://$MARIADB_DOCKER_PORT/$MARIADB_DATABASE?useSSL=false",
+            "spring.datasource.username" : "$MARIADB_USER",
+            "spring.datasource.password" : "$MARIADB_ROOT_PASSWORD",
             "spring.datasource.driver-class-name" : "org.mariadb.jdbc.Driver",
             "spring.jpa.hibernate.ddl-auto" : "update"
             "spring.thymeleaf.cache" : "false"
@@ -25,10 +25,10 @@ services:
     restart: unless-stopped
     env_file: ./.env
     environment:
-      - MARIADB_ROOT_PASSWORD=root
-      - MARIADB_DATABASE=stevedore
+      - MARIADB_ROOT_PASSWORD=$MARIADB_ROOT_PASSWORD
+      - MARIADB_DATABASE=$MARIADB_DATABASE
     ports:
-      - 3307:3306
+      - $MARIADB_LOCAL_PORT:$MARIADB_DOCKER_PORT
 
 
 volumes:
