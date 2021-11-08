@@ -1,6 +1,6 @@
 services:
   web:
-    image: stevedore_web
+    image: ${USER_CONTAINER}
     restart: 'always'
     depends_on:
       - mariadb
@@ -10,7 +10,7 @@ services:
     links:
       - mariadb
   mariadb:
-    image: mariadb
+    image: ${USER_CONTAINER}
     restart: 'always'
     volumes: 
       - "/var/lib/mysql/data:stevedore_data"
