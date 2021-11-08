@@ -12,7 +12,6 @@ services:
   
   app:
     image: testimage
-    env_file: ./.env
     ports:
       - 3307:3306
 
