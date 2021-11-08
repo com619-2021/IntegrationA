@@ -9,9 +9,6 @@ import uk.ca.solent.devops.stevedore.service.TestService;
 
 import java.util.List;
 
-
-@RestController
-//@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DummyRestController {
 
     private final TestService testService;
