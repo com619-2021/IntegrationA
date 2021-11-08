@@ -3,21 +3,6 @@ services:
     image: ${USER_CONTAINER}
     restart: 'always'
     depends_on:
-      - mariadb
     restart: 'always'
     ports:
-      - '8080:80'
-    links:
-      - mariadb
-  mariadb:
-    image: ${USER_CONTAINER}
-    restart: 'always'
-    volumes: 
-      - "/var/lib/mysql/data:stevedore_data"
-      - "/var/lib/mysql/logs:stevedore_log"
-      - /var/docker/mariadb/conf:/etc/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: stevedore
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      - '8080:8080'
