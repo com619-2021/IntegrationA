@@ -10,18 +10,12 @@ import uk.ca.solent.devops.stevedore.service.TestService;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DummyRestController {
 
     private final TestService testService;
 
     public DummyRestController(TestService testService) {
         this.testService = testService;
-    }
-
-    @GetMapping
-    List<TestModel> getHome() {
-        return testService.getAllTest();
     }
 
     //output to localhost:8080/test
