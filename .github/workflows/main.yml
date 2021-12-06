@@ -1,9 +1,9 @@
 name: Test-Workflow
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,28 +24,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build with Maven
-        working-directory: ./experimental/user-project/user-example/
+        working-directory: ./experimental/order-project/order-example
         run: | 
           mvn -B --update-snapshots package -P packageAsDocker
-          docker build ./docker -f ./docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/user-example:0.0.1
-          docker push ghcr.io/${{ github.repository_owner }}/user-example:0.0.1
+          docker build ./docker -f ./docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1
+          docker push ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1
           
-      - name: "Upload docker-compose to Azure"
-        uses: wlixcc/SFTP-Deploy-Action@v1.0
+      - name: Send dispatch to Repository
+        uses: peter-evans/repository-dispatch@v1
         with:
-          username: '${{ secrets.AZURE_USERNAME }}'
-          server: '${{ secrets.AZURE_HOSTNAME }}'
-          ssh_private_key: '${{ secrets.AZURE_KEY }}'
-          local_path: './experimental/user-project/user-example/docker/docker-compose.yml'
-          remote_path: '/tmp/docker-compose.yml'
-          
-      - name: "Run Compose on Azure"
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AZURE_HOSTNAME }}
-          username: ${{ secrets.AZURE_USERNAME }}
-          key: ${{ secrets.AZURE_KEY }}
-          port: 22
-          script: |
-            docker stop $(docker ps -a -q)
-            USER_CONTAINER=ghcr.io/${{ github.repository_owner }}/user-example:0.0.1 docker-compose -f /tmp/docker-compose.yml up -d
+          token: ${{ secrets.TOKEN }}
+          repository:  tom-lange-dev/solent-university 
+          event-type: deploy
+          client-payload: '{"image": "ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1"}'

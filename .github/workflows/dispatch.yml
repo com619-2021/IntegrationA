@@ -1,0 +1,37 @@
+name: Test dispatch
+on: 
+  repository_dispatch:
+      types: [deploy]
+
+jobs:
+    build-and-deploy:
+      name: Setup, Build and Publish
+      runs-on: ubuntu-latest
+      steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+        
+      - name: Show dispatch payload
+        run: 'echo "payload: ${{ toJson(github.event.client_payload) }}"'
+        
+      - name: "Upload docker-compose to Azure"
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: '${{ secrets.AZURE_USERNAME }}'
+          server: '${{ secrets.AZURE_HOSTNAME }}'
+          ssh_private_key: '${{ secrets.AZURE_KEY }}'
+          local_path: './experimental/order-project/order-example/docker/docker-compose-simple/docker-compose.yml'
+          remote_path: '/home/devops1/devel/gitrepos/IntegrationA/docker/docker-compose.yml'
+          
+      - name: "Run Compose on Azure"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AZURE_HOSTNAME }}
+          username: ${{ secrets.AZURE_USERNAME }}
+          key: ${{ secrets.AZURE_KEY }}
+          port: 22 
+          script: |
+            docker stop $(docker ps -a -q)
+            USER_CONTAINER=${{ github.event.client_payload.image }} docker-compose -f /home/devops1/devel/gitrepos/IntegrationA/docker/docker-compose.yml up -d   
+      
