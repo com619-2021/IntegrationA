@@ -34,6 +34,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.TOKEN }}
-          repository:  tom-lange-dev/solent-university 
+          repository: com619-2021/IntegrationA 
           event-type: deploy
           client-payload: '{"image": "ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1"}'
