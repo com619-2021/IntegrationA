@@ -1,0 +1,43 @@
+name: Restarting Container Images on Azure
+on: 
+    repository_dispatch:
+        types: [update]
+    workflow_dispatch:
+        
+    
+jobs:
+    deploy:
+      name: Deploy the latest image
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+        
+      - name: Upload docker-compose to Azure
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: ${{ secrets.AZURE_USERNAME }}
+          server: ${{ secrets.AZURE_HOSTNAME }}
+          ssh_private_key: ${{ secrets.AZURE_KEY }}
+          local_path: './docker/docker-compose.yml'
+          remote_path: '/home/devops1/devel/gitrepos/IntegrationA/docker/docker-compose.yml'
+          
+      - name: Upload NGINX config to Azure
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: ${{ secrets.AZURE_USERNAME }}
+          server: ${{ secrets.AZURE_HOSTNAME }}
+          ssh_private_key: ${{ secrets.AZURE_VM_KEY }}
+          local_path: './nginx/nginx.conf'
+          remote_path: '/etc/devops/nginx/nginx.conf'
+      
+      - name: Run docker-compose on Azure
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.AZURE_USERNAME }}
+          host: ${{ secrets.AZURE_HOSTNAME }}
+          key: ${{ secrets.AZURE_KEY }}
+          port: 22
+          script: |            
+            docker stop $(docker ps -a -q)
+            HARBOUR_IMAGE=${{ secrets.HARBOUR_IMAGE }} PORT_IMAGE=${{ secrets.PORT_IMAGE }} SHIPPING_IMAGE=${{ secrets.SHIPPING_IMAGE }} STEVEDORE_IMAGE=${{ secrets.STEVEDORE_IMAGE }} docker-compose -f /home/devops1/devel/gitrepos/IntegrationA/docker/docker-compose.yml up --remove-orphans -d
