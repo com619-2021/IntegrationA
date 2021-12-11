@@ -28,8 +28,8 @@ jobs:
           username: ${{ secrets.AZURE_USERNAME }}
           server: ${{ secrets.AZURE_HOSTNAME }}
           ssh_private_key: ${{ secrets.AZURE_VM_KEY }}
-          local_path: './nginx/nginx.conf'
-          remote_path: '/etc/devops/nginx/nginx.conf'
+          local_path: './nginx/app.conf'
+          remote_path: '/home/devops1/devel/gitrepos/IntegrationA/nginx/app.conf'
       
       - name: Run docker-compose on Azure
         uses: appleboy/ssh-action@master
