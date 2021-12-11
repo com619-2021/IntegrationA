@@ -1,1 +1,1 @@
-# Integration Teamn A
+# Integration Team A
