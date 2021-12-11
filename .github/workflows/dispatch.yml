@@ -39,6 +39,6 @@ jobs:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
-          token: ${{ secrets.REPO_TOKEN }}
+          token: ${{ secrets.PAT }}
           repository:  com619-2021/IntegrationA 
           event-type: update
