@@ -3,35 +3,42 @@ on:
   repository_dispatch:
       types: [deploy]
 
+env:
+  PERMITTED_REPOS: '["HARBOUR_IMAGE", "SHIPPING_IMAGE", "PORT_IMAGE", "STEVEDORE_IMAGE"]'
+  IMAGE_OWNER: "default"
+  IMAGE_TAG: "default"
+
 jobs:
     build-and-deploy:
       name: Setup, Build and Publish
       runs-on: ubuntu-latest
       steps:
       
+     # checkout the repo
       - name: Checkout
         uses: actions/checkout@v2.4.0
-        
-      - name: Show dispatch payload
-        run: 'echo "payload: ${{ toJson(github.event.client_payload) }}"'
-        
-      - name: "Upload docker-compose to Azure"
-        uses: wlixcc/SFTP-Deploy-Action@v1.0
+      - name: 'Update ENV vars'
+        run: |
+            echo "${{ github.event.client_payload.image_owner }}"
+            echo "IMAGE_OWNER=${{ github.event.client_payload.image_owner }}" >> $GITHUB_ENV
+            echo "IMAGE_TAG=${{ github.event.client_payload.image_tag }}" >> $GITHUB_ENV
+     
+      - name: "Check payload is from permitted repo"
+        if: ${{ !contains(env.PERMITTED_REPOS, env.IMAGE_OWNER) }}
+        uses: actions/github-script@v5.0.0
         with:
-          username: '${{ secrets.AZURE_USERNAME }}'
-          server: '${{ secrets.AZURE_HOSTNAME }}'
-          ssh_private_key: '${{ secrets.AZURE_KEY }}'
-          local_path: './experimental/order-project/order-example/docker/docker-compose-simple/docker-compose.yml'
-          remote_path: '/home/devops1/devel/gitrepos/IntegrationA/docker/docker-compose.yml'
-          
-      - name: "Run Compose on Azure"
-        uses: appleboy/ssh-action@master
+            script: |
+                core.setFailed('Image owner set incorrectly.')
+        
+      - name: Update Secret
+        uses: hmanzur/actions-set-secret@v2.0.0
         with:
-          host: ${{ secrets.AZURE_HOSTNAME }}
-          username: ${{ secrets.AZURE_USERNAME }}
-          key: ${{ secrets.AZURE_KEY }}
-          port: 22 
-          script: |
-            docker stop $(docker ps -a -q)
-            USER_CONTAINER=${{ github.event.client_payload.image }} docker-compose -f /home/devops1/devel/gitrepos/IntegrationA/docker/docker-compose.yml up -d   
-      
+          name: ${{ env.IMAGE_OWNER }}
+          value: ${{ env.IMAGE_TAG }}
+          token: ${{ secrets.UPDATE_TOKEN }}
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          repository:  com619-2021/IntegrationA 
+          event-type: update
