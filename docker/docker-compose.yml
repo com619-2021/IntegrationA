@@ -8,22 +8,6 @@ services:
     ports:
       - 80:80
       - 443:443
-  harbour:
-    image: ${HARBOUR_IMAGE}
-    expose:
-      - "8080"
-  port:
-    image: ${PORT_IMAGE}
-    expose:
-      - "8080"
-  stevedore:
-    image: ${STEVEDORE_IMAGE}
-    expose:
-      - "8080"
-  shipping:
-    image: ${SHIPPING_IMAGE}
-    expose:
-      - "8080"
   order:
     image: ${ORDER_IMAGE}
     expose:
