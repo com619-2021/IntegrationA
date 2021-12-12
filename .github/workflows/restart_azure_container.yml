@@ -27,7 +27,7 @@ jobs:
         with:
           username: ${{ secrets.AZURE_USERNAME }}
           server: ${{ secrets.AZURE_HOSTNAME }}
-          ssh_private_key: ${{ secrets.AZURE_VM_KEY }}
+          ssh_private_key: ${{ secrets.AZURE_KEY }}
           local_path: './nginx/app.conf'
           remote_path: '/home/devops1/devel/gitrepos/IntegrationA/nginx/app.conf'
       
