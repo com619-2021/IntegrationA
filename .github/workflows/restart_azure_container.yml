@@ -2,9 +2,7 @@ name: Restarting Container Images on Azure
 on: 
     repository_dispatch:
         types: [update]
-    workflow_dispatch:
         
-    
 jobs:
     deploy:
       name: Deploy the latest image
