@@ -22,7 +22,6 @@ services:
       - "8080"
     volumes:
       - stevedore-logs:/usr/local/tomcat/logs
-      
   harbour:
     image: ${HARBOUR_IMAGE}
     expose:
