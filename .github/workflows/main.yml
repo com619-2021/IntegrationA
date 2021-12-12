@@ -36,4 +36,4 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: com619-2021/IntegrationA 
           event-type: deploy
-          client-payload: '{"image_owner": "ORDER_EXAMPLE" ,"image_tag": "ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1"}'
+          client-payload: '{"image_owner": "ORDER_IMAGE" ,"image_tag": "ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1"}'
