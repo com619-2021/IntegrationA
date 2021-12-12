@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: nginx:latest
+    image: nginx:1.15-alpine
     container_name: production_nginx
     volumes:
       - /home/devops1/devel/gitrepos/IntegrationA/nginx/app.conf:/etc/nginx/nginx.conf
