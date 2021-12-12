@@ -14,7 +14,6 @@ jobs:
       runs-on: ubuntu-latest
       steps:
       
-     # checkout the repo
       - name: Checkout
         uses: actions/checkout@v2.4.0
       - name: 'Update ENV vars'
@@ -23,20 +22,20 @@ jobs:
             echo "IMAGE_OWNER=${{ github.event.client_payload.image_owner }}" >> $GITHUB_ENV
             echo "IMAGE_TAG=${{ github.event.client_payload.image_tag }}" >> $GITHUB_ENV
      
-      - name: "Check payload is from permitted repo"
+      - name: "Check if payload is from the list of permitted repositories"
         if: ${{ !contains(env.PERMITTED_REPOS, env.IMAGE_OWNER) }}
         uses: actions/github-script@v5.0.0
         with:
             script: |
-                core.setFailed('Image owner set incorrectly.')
+                core.setFailed('Image owner not permitted.')
         
-      - name: Update Secret
+      - name: Update secret variables
         uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: ${{ env.IMAGE_OWNER }}
           value: ${{ env.IMAGE_TAG }}
           token: ${{ secrets.PAT }}
-      - name: Repository Dispatch
+      - name: Repository Update
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.PAT }}
