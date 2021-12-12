@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: nginx:1.15-alpine
+    image: nginx:latest
     container_name: production_nginx
     volumes:
       - ./data:/etc/nginx/conf.d
