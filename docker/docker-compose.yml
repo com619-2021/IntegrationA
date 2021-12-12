@@ -23,6 +23,14 @@ services:
     volumes:
       - stevedore-logs:/usr/local/tomcat/logs
       
+  harbour:
+    image: ${HARBOUR_IMAGE}
+    expose:
+      - "8080"
+    volumes:
+      - harbour-logs:/usr/local/tomcat/logs
+      
 volumes:
   order-logs: {}
   stevedore-logs: {}
+  harbour-logs: {}
