@@ -1,0 +1,32 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: production_nginx
+    volumes:
+      - /etc/devops/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/:/etc/letsencrypt/
+    ports:
+      - 80:80
+      - 443:443
+  harbour:
+    image: ${HARBOUR_IMAGE}
+    expose:
+      - "8080"
+  port:
+    image: ${PORT_IMAGE}
+    expose:
+      - "8080"
+  stevedore:
+    image: ${STEVEDORE_IMAGE}
+    expose:
+      - "8080"
+  shipping:
+    image: ${SHIPPING_IMAGE}
+    expose:
+      - "8080"
+  order:
+    image: ${ORDER_IMAGE}
+    expose:
+      - "8080"
+    volumes:
+      - user-example-logs:/usr/local/tomcat/logs
