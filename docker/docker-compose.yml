@@ -3,8 +3,8 @@ services:
     image: nginx:latest
     container_name: production_nginx
     volumes:
-      - /etc/devops/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt/:/etc/letsencrypt/
+      - /home/devops1/devel/gitrepos/IntegrationA/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /home/devops1/devel/gitrepos/IntegrationA/nginx/:/etc/letsencrypt/
     ports:
       - 80:80
       - 443:443
