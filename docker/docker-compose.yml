@@ -3,8 +3,9 @@ services:
     image: nginx:1.15-alpine
     container_name: production_nginx
     volumes:
-      - /home/devops1/devel/gitrepos/IntegrationA/nginx/app.conf:/etc/nginx/nginx.conf
-      - /home/devops1/devel/gitrepos/IntegrationA/nginx/:/etc/letsencrypt/
+      - ./data:/etc/nginx/nginx.conf
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     ports:
       - 80:80
       - 443:443
