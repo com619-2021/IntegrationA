@@ -16,6 +16,13 @@ services:
       - "8080"
     volumes:
       - order-logs:/usr/local/tomcat/logs
+  stevedore:
+    image: ${STEVEDORE_IMAGE}
+    expose:
+      - "8080"
+    volumes:
+      - stevedore-logs:/usr/local/tomcat/logs
       
 volumes:
   order-logs: {}
+  stevedore-logs: {}
