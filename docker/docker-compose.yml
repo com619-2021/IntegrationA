@@ -29,4 +29,7 @@ services:
     expose:
       - "8080"
     volumes:
-      - user-example-logs:/usr/local/tomcat/logs
+      - order-logs:/usr/local/tomcat/logs
+      
+volumes:
+  order-logs: {}
