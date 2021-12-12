@@ -10,6 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Get Release Tag
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -27,8 +29,8 @@ jobs:
         working-directory: ./experimental/order-project/order-example
         run: | 
           mvn -B --update-snapshots package -P packageAsDocker
-          docker build ./docker -f ./docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1
-          docker push ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1
+          docker build ./docker -f ./docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/order-example:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/${{ github.repository_owner }}/order-example:${{ env.RELEASE_VERSION }}
           
       - name: Send dispatch to Repository
         uses: peter-evans/repository-dispatch@v1
@@ -36,4 +38,4 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: com619-2021/IntegrationA 
           event-type: deploy
-          client-payload: '{"image_owner": "ORDER_IMAGE" ,"image_tag": "ghcr.io/${{ github.repository_owner }}/order-example:v0.0.1"}'
+          client-payload: '{"image_owner": "ORDER_IMAGE" ,"image_tag": "ghcr.io/${{ github.repository_owner }}/order-example:${{ env.RELEASE_VERSION }}"}'
